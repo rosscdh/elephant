@@ -35,8 +35,6 @@ BUCKET_NAME = 'elephant-{}'.format(CLUSTER_NAME)
 
 # Elastic Search Stuff.
 ES = ElasticSearch(ELASTICSEARCH_URL)
-_url = urlparse.urlparse(ES.servers.live[0])
-ES_AUTH = (_url.username, _url.password)
 
 class TrunkStore(object):
     """An abstracted S3 Bucket. Allows for airplane mode :)"""
@@ -136,13 +134,20 @@ class Collection(object):
         params['es_q'] = query
 
         q = {
+            'query': {
+                'filtered': {
+                    'query': {
+                        'query_string': {'query': query}
+                    }
+                }
+            },
             'sort': [
                 {"epoch" : {"order" : "desc"}},
             ]
         }
 
-        q['query'] = {'term': {'query': query}},
-
+        #q['query'] = {'term': {'query': query}},
+        #import pdb;pdb.set_trace()
         results = ES.search(q, index=self.name, **params)
 
         params['es_q'] = query
