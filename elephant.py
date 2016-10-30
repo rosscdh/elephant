@@ -88,6 +88,7 @@ class TrunkStore(object):
 
         return [k.name for k in self._bucket.list()]
 
+
 def mkdir_p(path):
     """Emulates `mkdir -p` behavior."""
     try:
@@ -108,8 +109,8 @@ def epoch(dt=None):
     return int(time.mktime(dt.timetuple()) * 1000 + dt.microsecond / 1000)
 
 
-
 TRUNK = TrunkStore(name=BUCKET_NAME, airplane_mode=AIRPLANE_MODE)
+
 
 class Collection(object):
     """A set of Records."""
